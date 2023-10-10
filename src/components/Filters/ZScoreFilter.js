@@ -114,7 +114,7 @@ const ZScoreFilter = () => {
         size="lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Z-Score Settings</Modal.Title>
+          <h5>Z-Score Settings</h5>
         </Modal.Header>
         <Modal.Body>
           <Container>
@@ -135,6 +135,7 @@ const ZScoreFilter = () => {
                             </Form.Label>
                             <Form.Control
                               type="number"
+                              size="sm"
                               placeholder={`Enter Scarcity Factor for ${
                                 headers.find(
                                   (header) => header.key === position
@@ -171,6 +172,7 @@ const ZScoreFilter = () => {
                             </Form.Label>
                             <Form.Control
                               type="number"
+                              size="sm"
                               name={stat}
                               placeholder={`Enter Weight for ${
                                 headers.find((header) => header.key === stat)
@@ -207,6 +209,7 @@ const ZScoreFilter = () => {
                             </Form.Label>
                             <Form.Control
                               type="number"
+                              size="sm"
                               name={stat}
                               placeholder={`Enter Weight for ${
                                 headers.find((header) => header.key === stat)
