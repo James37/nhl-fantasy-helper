@@ -90,18 +90,20 @@ const ZScoreFilter = () => {
   return (
     <>
       <OverlayTrigger placement="bottom" overlay={tooltip}>
-        <Form.Group controlId="zScoreFilter">
-          <Form.Label>Z-Score</Form.Label>
-          <div>
-            <Button
-              variant="outline-primary"
-              size="sm"
-              onClick={() => setShowModal(true)}
-            >
-              Customize
-            </Button>
-          </div>
-        </Form.Group>
+        <Col sm={3} lg="auto" className="mb-3">
+          <Form.Group controlId="zScoreFilter">
+            <Form.Label>Z-Score</Form.Label>
+            <div>
+              <Button
+                variant="outline-primary"
+                size="sm"
+                onClick={() => setShowModal(true)}
+              >
+                Customize
+              </Button>
+            </div>
+          </Form.Group>
+        </Col>
       </OverlayTrigger>
 
       <Modal

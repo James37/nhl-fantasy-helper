@@ -9,6 +9,7 @@ import MinGamesFilter from "./MinGamesFilter";
 import PlayerSearchFilter from "./PlayerSearchFilter";
 import CompareSelectedFilter from "./CompareSelectedFilter";
 import SumSeasonsFilter from "./SumSeasonsFilter";
+import { Nav, Navbar, Row } from "react-bootstrap";
 
 const Filters = () => {
   const {
@@ -44,17 +45,24 @@ const Filters = () => {
   }, [compareList, filterOptions, setCurrentPage, setFilteredData]);
 
   return (
-    <div className="d-flex justify-content-between my-4">
-      <SeasonFilter />
-      {/* <SumSeasonsFilter /> */}
-      <PositionFilter />
-      <TeamFilter />
-      <MinGamesFilter />
-      <PlayerSearchFilter />
-      <StatsPerGameFilter />
-      <CompareSelectedFilter />
-      <ZScoreFilter />
-    </div>
+    <Navbar expand="sm">
+      <Navbar.Toggle aria-controls="navbar-nav" />
+      <Navbar.Collapse id="navbar-nav">
+        <Nav className="me-auto">
+          <Row className="my-2">
+            <SeasonFilter />
+            {/* <SumSeasonsFilter /> */}
+            <PositionFilter />
+            <TeamFilter />
+            <MinGamesFilter />
+            <PlayerSearchFilter />
+            <StatsPerGameFilter />
+            <CompareSelectedFilter />
+            <ZScoreFilter />
+          </Row>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
 

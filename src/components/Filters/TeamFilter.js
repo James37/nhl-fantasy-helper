@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Form } from "react-bootstrap";
+import { Col, Form } from "react-bootstrap";
 import { PlayerTableContext } from "../../context/PlayerTableContext";
 import teams from "../../data/teams.json"
 
@@ -7,7 +7,7 @@ const TeamFilter = () => {
   const { filterOptions, setFilterOptions } = useContext(PlayerTableContext);
 
   return (
-    <div>
+    <Col sm={3} lg="auto" className="mb-3">
       <Form.Label className="mr-2">Team</Form.Label>
       <Form.Control
         as="select"
@@ -27,7 +27,7 @@ const TeamFilter = () => {
           </option>
         ))}
       </Form.Control>
-    </div>
+    </Col>
   );
 };
 
