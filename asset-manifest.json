@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/nhl-fantasy-helper/static/css/main.9493e899.css",
-    "main.js": "/nhl-fantasy-helper/static/js/main.d38cbe1a.js",
+    "main.css": "/nhl-fantasy-helper/static/css/main.6e7482e3.css",
+    "main.js": "/nhl-fantasy-helper/static/js/main.ef0da782.js",
     "static/js/787.7b6851d7.chunk.js": "/nhl-fantasy-helper/static/js/787.7b6851d7.chunk.js",
     "index.html": "/nhl-fantasy-helper/index.html",
-    "main.9493e899.css.map": "/nhl-fantasy-helper/static/css/main.9493e899.css.map",
-    "main.d38cbe1a.js.map": "/nhl-fantasy-helper/static/js/main.d38cbe1a.js.map",
+    "main.6e7482e3.css.map": "/nhl-fantasy-helper/static/css/main.6e7482e3.css.map",
+    "main.ef0da782.js.map": "/nhl-fantasy-helper/static/js/main.ef0da782.js.map",
     "787.7b6851d7.chunk.js.map": "/nhl-fantasy-helper/static/js/787.7b6851d7.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9493e899.css",
-    "static/js/main.d38cbe1a.js"
+    "static/css/main.6e7482e3.css",
+    "static/js/main.ef0da782.js"
   ]
 }
