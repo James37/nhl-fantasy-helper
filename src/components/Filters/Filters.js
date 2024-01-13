@@ -49,7 +49,7 @@ const Filters = () => {
       <Navbar.Toggle aria-controls="navbar-nav" />
       <Navbar.Collapse id="navbar-nav">
         <Nav className="me-auto">
-          <Row className="my-2">
+          <Row className="my-2 filter-row">
             <SeasonFilter />
             {/* <SumSeasonsFilter /> */}
             <PositionFilter />
