@@ -1,6 +1,6 @@
 import React, { createContext, useState } from "react";
-import skaterData from "../data/skaterData.json";
-import goalieData from "../data/goalieData.json";
+import skaterData from "../data/playerData/skaterData.json";
+import goalieData from "../data/playerData/goalieData.json";
 import defaultScarcityFactor from "../data/defaultScarcityFactors.json";
 import defaultWeights from "../data/defaultWeights.json";
 
@@ -18,7 +18,7 @@ const PlayerTableProvider = ({ children }) => {
     selectedTeam: "",
     minGamesPlayed: 0,
     searchTerm: "",
-    selectedSeason: "20222023",
+    selectedSeason: "20232024",
     compareSelected: false,
     sumSeasons: false,
   });
@@ -26,8 +26,10 @@ const PlayerTableProvider = ({ children }) => {
   const fullData = [
     ...skaterData["2021"],
     ...skaterData["2022"],
+    ...skaterData["2023"],
     ...goalieData["2021"],
     ...goalieData["2022"],
+    ...goalieData["2023"],
   ];
   const [filteredData, setFilteredData] = useState(fullData);
 

@@ -1,0 +1,21 @@
+[
+  "gamesPlayed",
+  "gamesStarted",
+  "goalieFullName",
+  "goalsAgainst",
+  "goalsAgainstAverage",
+  "lastName",
+  "losses",
+  "otLosses",
+  "playerId",
+  "savePct",
+  "saves",
+  "seasonId",
+  "shotsAgainst",
+  "shutouts",
+  "teamAbbrevs",
+  "wins",
+  "positionCode",
+  "birthDate",
+  "currentTeamAbbrev"
+]

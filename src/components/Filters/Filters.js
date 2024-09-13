@@ -33,7 +33,7 @@ const Filters = () => {
         (!filterOptions.selectedTeam ||
           player.teamAbbrevs === filterOptions.selectedTeam) &&
         (!filterOptions.selectedSeason ||
-          player.seasonId.toString() === filterOptions.selectedSeason) &&
+          player.seasonId?.toString() === filterOptions.selectedSeason) &&
         player.gamesPlayed >= filterOptions.minGamesPlayed &&
         (!filterOptions.compareSelected ||
           compareList.includes(player.playerId + player.seasonId))

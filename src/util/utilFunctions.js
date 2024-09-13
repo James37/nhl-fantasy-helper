@@ -16,9 +16,9 @@ export const formatValue = (
   compareList,
   setCompareList
 ) => {
-  if (headerKey === "seasonId") {
+  if (headerKey === "seasonId" && value) {
     return (
-      <span className={value === 20222023 ? "fw-bold" : ""}>
+      <span className={value === 20232024 ? "fw-bold" : ""}>
         {value.toString().slice(2, 4)}-{value.toString().slice(6, 8)}
       </span>
     );
