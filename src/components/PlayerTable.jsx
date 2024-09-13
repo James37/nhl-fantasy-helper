@@ -1,11 +1,11 @@
 import React, { useMemo, useState, useContext } from "react";
 import { Table } from "react-bootstrap";
 import headers from "../data/tableHeaders.json";
-import Pagination from "./Pagination";
-import Filters from "./Filters/Filters";
-import { calculateStatValues, calculateZScore } from "../util/ZScoreCalculator";
-import { formatValue } from "../util/utilFunctions";
-import { PlayerTableContext } from "../context/PlayerTableContext";
+import Pagination from "./Pagination.jsx";
+import Filters from "./Filters/Filters.jsx";
+import { calculateStatValues, calculateZScore } from "../util/ZScoreCalculator.js";
+import { formatValue } from "../util/utilFunctions.jsx";
+import { PlayerTableContext } from "../context/PlayerTableContext.jsx";
 
 const PlayerTable = () => {
   const [sortColumn, setSortColumn] = useState("zScore");

@@ -9,6 +9,29 @@ export const handlePlayerClick = (player) => {
   window.open(url, "_blank");
 };
 
+const calculateAge = (birthDateString) => {
+  // Create a Date object from the input string
+  const birthDate = new Date(birthDateString);
+
+  // Get today's date
+  const today = new Date();
+
+  // Calculate the age
+  let age = today.getFullYear() - birthDate.getFullYear();
+
+  // Adjust the age if the birth date hasn't occurred yet this year
+  const hasBirthdayOccurred =
+    today.getMonth() > birthDate.getMonth() ||
+    (today.getMonth() === birthDate.getMonth() &&
+      today.getDate() >= birthDate.getDate());
+
+  if (!hasBirthdayOccurred) {
+    age--;
+  }
+
+  return age;
+};
+
 export const formatValue = (
   player,
   value,
@@ -29,6 +52,9 @@ export const formatValue = (
         {value}
       </span>
     );
+  }
+  if (headerKey === "birthDate") {
+    return <span>{calculateAge(value)}</span>;
   }
   if (headerKey === "compare") {
     const checked = compareList.includes(player.playerId + player.seasonId);

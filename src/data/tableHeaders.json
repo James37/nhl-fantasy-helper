@@ -1,6 +1,7 @@
 [
   { "key": "compare", "label": "⭐" },
   { "key": "skaterFullName", "label": "Player" },
+  { "key": "birthDate", "label": "Age" },
   { "key": "seasonId", "label": "Season" },
   { "key": "teamAbbrevs", "label": "Team" },
   { "key": "positionCode", "label": "Pos" },

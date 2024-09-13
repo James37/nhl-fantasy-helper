@@ -1,5 +1,3 @@
-// Pagination.js
-
 import { Button, FormControl } from "react-bootstrap";
 import { PlayerTableContext } from "../context/PlayerTableContext";
 import { useContext } from "react";
