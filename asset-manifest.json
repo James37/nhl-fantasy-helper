@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/nhl-fantasy-helper/static/css/main.6e7482e3.css",
-    "main.js": "/nhl-fantasy-helper/static/js/main.ef0da782.js",
-    "static/js/787.7b6851d7.chunk.js": "/nhl-fantasy-helper/static/js/787.7b6851d7.chunk.js",
+    "main.css": "/nhl-fantasy-helper/static/css/main.c3d9b50b.css",
+    "main.js": "/nhl-fantasy-helper/static/js/main.007ad755.js",
+    "static/js/488.8ad76811.chunk.js": "/nhl-fantasy-helper/static/js/488.8ad76811.chunk.js",
     "index.html": "/nhl-fantasy-helper/index.html",
-    "main.6e7482e3.css.map": "/nhl-fantasy-helper/static/css/main.6e7482e3.css.map",
-    "main.ef0da782.js.map": "/nhl-fantasy-helper/static/js/main.ef0da782.js.map",
-    "787.7b6851d7.chunk.js.map": "/nhl-fantasy-helper/static/js/787.7b6851d7.chunk.js.map"
+    "main.c3d9b50b.css.map": "/nhl-fantasy-helper/static/css/main.c3d9b50b.css.map",
+    "main.007ad755.js.map": "/nhl-fantasy-helper/static/js/main.007ad755.js.map",
+    "488.8ad76811.chunk.js.map": "/nhl-fantasy-helper/static/js/488.8ad76811.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.6e7482e3.css",
-    "static/js/main.ef0da782.js"
+    "static/css/main.c3d9b50b.css",
+    "static/js/main.007ad755.js"
   ]
 }
