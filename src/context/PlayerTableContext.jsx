@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useMemo } from "react";
 import skaterData from "../data/playerData/skaterData.json";
 import goalieData from "../data/playerData/goalieData.json";
 import defaultScarcityFactor from "../data/defaultScarcityFactors.json";
@@ -23,38 +23,55 @@ const PlayerTableProvider = ({ children }) => {
     sumSeasons: false,
   });
 
-  const fullData = [
-    ...skaterData["2021"],
-    ...skaterData["2022"],
-    ...skaterData["2023"],
-    ...goalieData["2021"],
-    ...goalieData["2022"],
-    ...goalieData["2023"],
-  ];
+  const fullData = useMemo(
+    () => [
+      ...skaterData["2021"],
+      ...skaterData["2022"],
+      ...skaterData["2023"],
+      ...goalieData["2021"],
+      ...goalieData["2022"],
+      ...goalieData["2023"],
+    ],
+    []
+  );
+
   const [filteredData, setFilteredData] = useState(fullData);
 
+  const contextValue = useMemo(
+    () => ({
+      pageSize,
+      setPageSize,
+      currentPage,
+      setCurrentPage,
+      fullData,
+      filteredData,
+      setFilteredData,
+      statsPerGame,
+      setStatsPerGame,
+      scarcityFactors,
+      weights,
+      setScarcityFactors,
+      setWeights,
+      filterOptions,
+      setFilterOptions,
+      compareList,
+      setCompareList,
+    }),
+    [
+      pageSize,
+      currentPage,
+      fullData,
+      filteredData,
+      statsPerGame,
+      scarcityFactors,
+      weights,
+      filterOptions,
+      compareList,
+    ]
+  );
+
   return (
-    <PlayerTableContext.Provider
-      value={{
-        pageSize,
-        setPageSize,
-        currentPage,
-        setCurrentPage,
-        fullData,
-        filteredData,
-        setFilteredData,
-        statsPerGame,
-        setStatsPerGame,
-        scarcityFactors,
-        weights,
-        setScarcityFactors,
-        setWeights,
-        filterOptions,
-        setFilterOptions,
-        compareList,
-        setCompareList,
-      }}
-    >
+    <PlayerTableContext.Provider value={contextValue}>
       {children}
     </PlayerTableContext.Provider>
   );

@@ -10,16 +10,12 @@ export const handlePlayerClick = (player) => {
 };
 
 const calculateAge = (birthDateString) => {
-  // Create a Date object from the input string
   const birthDate = new Date(birthDateString);
+  if (isNaN(birthDate)) return "N/A"; // Handle invalid dates
 
-  // Get today's date
   const today = new Date();
-
-  // Calculate the age
   let age = today.getFullYear() - birthDate.getFullYear();
 
-  // Adjust the age if the birth date hasn't occurred yet this year
   const hasBirthdayOccurred =
     today.getMonth() > birthDate.getMonth() ||
     (today.getMonth() === birthDate.getMonth() &&
@@ -39,6 +35,7 @@ export const formatValue = (
   compareList,
   setCompareList
 ) => {
+  // SeasonId: Format bold for current season
   if (headerKey === "seasonId" && value) {
     return (
       <span className={value === 20232024 ? "fw-bold" : ""}>
@@ -46,6 +43,8 @@ export const formatValue = (
       </span>
     );
   }
+
+  // Player Name: Clickable link
   if (headerKey === "skaterFullName") {
     return (
       <span className="player-name" onClick={() => handlePlayerClick(player)}>
@@ -53,35 +52,41 @@ export const formatValue = (
       </span>
     );
   }
+
+  // Birthdate: Convert to age
   if (headerKey === "birthDate") {
     return <span>{calculateAge(value)}</span>;
   }
+
+  // Compare: Checkbox for player comparison
   if (headerKey === "compare") {
-    const checked = compareList.includes(player.playerId + player.seasonId);
+    const playerIdSeason = player.playerId + player.seasonId;
+    const checked = compareList.includes(playerIdSeason);
 
     return (
       <Form.Check
         type="checkbox"
         checked={checked}
         onChange={() => {
-          setCompareList((prevList) => {
-            if (checked) {
-              return prevList.filter(
-                (id) => id !== player.playerId + player.seasonId
-              );
-            } else {
-              return [...prevList, player.playerId + player.seasonId];
-            }
-          });
+          setCompareList((prevList) =>
+            checked
+              ? prevList.filter((id) => id !== playerIdSeason)
+              : [...prevList, playerIdSeason]
+          );
         }}
       />
     );
   }
-  if (value === null || value === "NaN") {
+
+  // Handle null or NaN values
+  if (value == null || value === "NaN") {
     return "";
   }
+
+  // Format floating-point numbers
   if (typeof value === "number" && !Number.isInteger(value)) {
     return parseFloat(value.toFixed(headerKey === "savePct" ? 3 : 2));
   }
+
   return value;
 };
