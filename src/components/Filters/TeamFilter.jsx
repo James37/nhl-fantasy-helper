@@ -8,7 +8,7 @@ const TeamFilter = () => {
 
   return (
     <Col sm={3} lg="auto" className="mb-3">
-      <Form.Label className="mr-2">Team</Form.Label>
+      <Form.Label className="me-2">Team</Form.Label>
       <Form.Control
         as="select"
         value={filterOptions.selectedTeam}

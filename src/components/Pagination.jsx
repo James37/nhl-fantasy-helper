@@ -17,6 +17,7 @@ const Pagination = ({ sortedData }) => {
     <div className="d-flex justify-content-between sticky-bottom table-pagination">
       <div>
         <Button
+          className="me-2"
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 1}
           size="sm"
@@ -25,7 +26,6 @@ const Pagination = ({ sortedData }) => {
           Prev
         </Button>
         <Button
-          className="ml-2"
           onClick={() => setCurrentPage(currentPage + 1)}
           disabled={currentPage === totalPages}
           size="sm"
@@ -35,7 +35,7 @@ const Pagination = ({ sortedData }) => {
         </Button>
       </div>
       <div className="d-flex align-items-center">
-        <label className="mr-2">Page Size: </label>
+        <label className="me-2">Page Size: </label>
         <FormControl
           size="sm"
           className="w-50"

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import PositionFilter from "./PositionFilter";
 import TeamFilter from "./TeamFilter";
 import SeasonFilter from "./SeasonFilter";

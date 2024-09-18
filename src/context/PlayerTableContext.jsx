@@ -1,4 +1,4 @@
-import React, { createContext, useState, useMemo } from "react";
+import { createContext, useState, useMemo } from "react";
 import skaterData from "../data/playerData/skaterData.json";
 import goalieData from "../data/playerData/goalieData.json";
 import defaultScarcityFactor from "../data/defaultScarcityFactors.json";

@@ -1,9 +1,12 @@
-import React, { useMemo, useState, useContext } from "react";
+import { useMemo, useState, useContext } from "react";
 import { Table } from "react-bootstrap";
 import headers from "../data/tableHeaders.json";
 import Pagination from "./Pagination.jsx";
 import Filters from "./Filters/Filters.jsx";
-import { calculateStatValues, calculateZScore } from "../util/ZScoreCalculator.js";
+import {
+  calculateStatValues,
+  calculateZScore,
+} from "../util/ZScoreCalculator.js";
 import { formatValue } from "../util/utilFunctions.jsx";
 import { PlayerTableContext } from "../context/PlayerTableContext.jsx";
 
@@ -96,7 +99,7 @@ const PlayerTable = () => {
       dataToSort = dataToSort.map((player) => {
         const updatedPlayer = { ...player };
         perGameStats.forEach((stat) => {
-          if (player.gamesPlayed !== 0 && updatedPlayer[stat]) {
+          if (player.gamesPlayed !== 0 && updatedPlayer[stat] !== undefined) {
             updatedPlayer[stat] = player[stat] / player.gamesPlayed;
           }
         });
@@ -164,7 +167,7 @@ const PlayerTable = () => {
 
         return {
           ...player,
-          zScore: formatValue(player, zScore, "zScore"),
+          zScore: zScore,
         };
       })
       .filter((player) => {

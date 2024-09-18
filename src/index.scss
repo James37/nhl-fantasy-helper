@@ -13,6 +13,12 @@ code {
     monospace;
 }
 
+@media (max-width: 767.98px) and (orientation: landscape) {
+  .container {
+    max-width: 100%;
+  }
+}
+
 td.sorted {
   background-color: #eaf1fc !important; /* Change to desired background color */
 }

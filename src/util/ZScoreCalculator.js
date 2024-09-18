@@ -1,3 +1,5 @@
+import { mean, standardDeviation } from "simple-statistics";
+
 export const calculateStatValues = (stats) => {
   const statMeans = {};
   const statStdDevs = {};
@@ -5,20 +7,9 @@ export const calculateStatValues = (stats) => {
   for (const stat in stats[0]) {
     const values = stats.map((player) => player[stat]);
 
-    // Calculate mean
-    const sum = values.reduce((total, value) => total + value, 0);
-    const mean = sum / values.length;
-    statMeans[stat] = mean;
-
-    // Calculate standard deviation
-    const squaredDifferences = values.map((value) => Math.pow(value - mean, 2));
-    const sumSquaredDifferences = squaredDifferences.reduce(
-      (total, value) => total + value,
-      0
-    );
-    const variance = sumSquaredDifferences / values.length;
-    const stdDev = Math.sqrt(variance);
-    statStdDevs[stat] = stdDev;
+    // Calculate mean and standard deviation using simple-statistics
+    statMeans[stat] = mean(values);
+    statStdDevs[stat] = standardDeviation(values);
   }
 
   return { statMeans, statStdDevs };
@@ -31,21 +22,31 @@ export const calculateZScore = (
   scarcityFactors,
   weights
 ) => {
-  const totalZScore = Object.keys(weights).reduce((total, stat) => {
-    const scarcityFactor = scarcityFactors[player.positionCode] || 1; // Fallback to 1 if undefined
+  let totalZScore = 0;
+  let statCount = 0; // Count the number of valid stats considered
 
-    const mean = statMeans[stat];
-    const stdDev = statStdDevs[stat];
+  Object.keys(weights).forEach((stat) => {
+    const weight = weights[stat];
 
-    // Check if standard deviation is 0 to avoid division by 0
-    if (stdDev === 0) {
-      return total; // Skip this stat, or handle as needed (e.g., assign zero z-score for this stat)
+    // Only consider stats with a non-zero weight and valid player stat
+    if (weight !== 0) {
+      const scarcityFactor = scarcityFactors[player.positionCode] || 1;
+      const mean = statMeans[stat];
+      const stdDev = statStdDevs[stat];
+      const playerStat = player[stat];
+
+      // Skip if standard deviation is zero to avoid division by zero
+      if (stdDev === 0) {
+        return; // You could also set adjustedZScore = 0 if preferred
+      }
+
+      // Calculate adjusted Z-score
+      const adjustedZScore = ((playerStat - mean) / stdDev) * scarcityFactor;
+      totalZScore += adjustedZScore * weight;
+      statCount++; // Increment for each valid stat considered
     }
+  });
 
-    const adjustedZScore = ((player[stat] - mean) / stdDev) * scarcityFactor;
-
-    return total + adjustedZScore * weights[stat];
-  }, 0);
-
-  return totalZScore;
+  // Return the average Z-score by dividing the total by the number of valid stats
+  return statCount > 0 ? totalZScore / statCount : 0;
 };
