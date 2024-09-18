@@ -58,6 +58,17 @@ export const formatValue = (
     return <span>{calculateAge(value)}</span>;
   }
 
+  // Show current team, if it's different
+  if (headerKey === "teamAbbrevs") {
+    if (value !== player.currentTeamAbbrev) {
+      return (
+        <span>
+          {value} ({player.currentTeamAbbrev})
+        </span>
+      );
+    }
+  }
+
   // Compare: Checkbox for player comparison
   if (headerKey === "compare") {
     const playerIdSeason = player.playerId + player.seasonId;
