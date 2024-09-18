@@ -15,10 +15,9 @@ const Pagination = ({ sortedData }) => {
 
   return (
     <div className="d-flex justify-content-between sticky-bottom table-pagination">
-      <div className="d-flex align-items-center">
+      <div className="d-flex align-items-center" style={{ maxWidth: "25%" }}>
         <label className="me-1">Rows:</label>
         <FormControl
-          style={{ maxWidth: "35%" }}
           size="sm"
           type="number"
           min="1"
