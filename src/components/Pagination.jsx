@@ -15,38 +15,39 @@ const Pagination = ({ sortedData }) => {
 
   return (
     <div className="d-flex justify-content-between sticky-bottom table-pagination">
-      <div>
-        <Button
-          className="me-2"
-          onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 1}
-          size="sm"
-          variant="outline-primary"
-        >
-          Prev
-        </Button>
-        <Button
-          onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          size="sm"
-          variant="outline-primary"
-        >
-          Next
-        </Button>
-      </div>
       <div className="d-flex align-items-center">
-        <label className="me-2">Page Size: </label>
+        <label className="me-1">Rows:</label>
         <FormControl
+          style={{ maxWidth: "35%" }}
           size="sm"
-          className="w-50"
           type="number"
           min="1"
           value={pageSize}
           onChange={handlePageSizeChange}
         />
       </div>
-      <div>
-        Page {currentPage} of {totalPages} ({sortedData.length} players)
+      <div className="d-flex align-items-center">
+        <Button
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          size="sm"
+          variant="outline-primary"
+        >
+          {"<"}
+        </Button>
+
+        <div className="mx-2">
+          Page {currentPage} / {totalPages} ({sortedData.length} players)
+        </div>
+
+        <Button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          size="sm"
+          variant="outline-primary"
+        >
+          {">"}
+        </Button>
       </div>
     </div>
   );
