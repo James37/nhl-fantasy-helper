@@ -10,7 +10,6 @@ import PlayerSearchFilter from "./PlayerSearchFilter";
 import CompareSelectedFilter from "./CompareSelectedFilter";
 import SumSeasonsFilter from "./SumSeasonsFilter";
 import { Nav, Navbar, Row } from "react-bootstrap";
-import Login from "./Login";
 
 const Filters = () => {
   const {
@@ -60,7 +59,6 @@ const Filters = () => {
             <StatsPerGameFilter />
             <CompareSelectedFilter />
             <ZScoreFilter />
-            <Login />
           </Row>
         </Nav>
       </Navbar.Collapse>
