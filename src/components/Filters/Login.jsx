@@ -10,7 +10,7 @@ const Login = () => {
   // Fetch Fantasy Data after login
   const fetchFantasyData = async () => {
     try {
-      const response = await axios.get("https://nhl-fantasy-helper-server.onrender.comfantasy-data", {
+      const response = await axios.get("https://nhl-fantasy-helper-server.onrender.com/fantasy-data", {
         withCredentials: true, // Allow sending cookies
       });
       console.log("Fantasy Data:", response.data);
