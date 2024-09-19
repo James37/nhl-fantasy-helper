@@ -1,4 +1,3 @@
-import React from "react";
 import PlayerTable from "./components/PlayerTable";
 import { Container } from "react-bootstrap";
 import { PlayerTableProvider } from "./context/PlayerTableContext";
