@@ -20,20 +20,24 @@ export const calculateZScore = (
   statMeans,
   statStdDevs,
   scarcityFactors,
-  weights
+  weights,
+  sumSeasons
 ) => {
   let totalZScore = 0;
   let statCount = 0; // Count the number of valid stats considered
 
   Object.keys(weights).forEach((stat) => {
-    const weight = weights[stat];
+    let weight = weights[stat];
+    if (stat === "goalsAgainstAverage") {
+      weight = -1 * weight;
+    }
 
     // Only consider stats with a non-zero weight and valid player stat
     if (weight !== 0) {
       const scarcityFactor = scarcityFactors[player.positionCode] || 1;
       const mean = statMeans[stat];
       const stdDev = statStdDevs[stat];
-      const playerStat = player[stat];
+      const playerStat = player[sumSeasons ? `${stat}Weighted` : stat];
 
       // Skip if standard deviation is zero to avoid division by zero
       if (stdDev === 0) {

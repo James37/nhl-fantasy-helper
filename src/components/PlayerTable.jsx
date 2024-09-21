@@ -9,6 +9,7 @@ import {
 } from "../util/ZScoreCalculator.js";
 import { formatValue } from "../util/utilFunctions.jsx";
 import { PlayerTableContext } from "../context/PlayerTableContext.jsx";
+import _ from "lodash";
 
 const PlayerTable = () => {
   const [sortColumn, setSortColumn] = useState("zScore");
@@ -40,48 +41,84 @@ const PlayerTable = () => {
     let dataToSort = [...filteredData];
 
     if (filterOptions.sumSeasons) {
-      const aggregatedData = {};
-      const seasonIds = dataToSort.map((record) => record.seasonId);
+      const getCombinedSeasonId = (records) => {
+        // Find the min and max seasonId
+        const seasonIds = records.map((record) => record.seasonId);
+        const minSeasonId = Math.min(...seasonIds);
+        const maxSeasonId = Math.max(...seasonIds);
 
-      const minSeasonId = Math.min(...seasonIds);
-      const maxSeasonId = Math.max(...seasonIds);
+        const minSeasonIdStr = minSeasonId.toString();
+        const maxSeasonIdStr = maxSeasonId.toString();
 
-      const minSeasonIdStr = minSeasonId.toString();
-      const maxSeasonIdStr = maxSeasonId.toString();
+        return parseInt(minSeasonIdStr.slice(0, 4) + maxSeasonIdStr.slice(-4));
+      };
 
-      const newSeasonId = parseInt(
-        minSeasonIdStr.slice(0, 4) + maxSeasonIdStr.slice(-4)
-      );
+      // Function to merge and sum stats, applying season weights
+      const mergeStatsByPlayerIdWithWeights = (data) => {
+        // Season weights
+        const seasonWeights = {
+          20212022: 1,
+          20222023: 4,
+          20232024: 7,
+        };
 
-      dataToSort.forEach((record) => {
-        const {
-          playerId,
-          skaterFullName,
-          positionCode,
-          teamAbbrevs,
-          seasonId,
-          ...rest
-        } = record;
+        // Stats to sum together
+        const statFieldsToMerge = [
+          "assists",
+          "blockedShots",
+          "gamesPlayed",
+          "goals",
+          "hits",
+          "points",
+          "ppPoints",
+          "shots",
+        ];
 
-        if (!aggregatedData[playerId]) {
-          aggregatedData[playerId] = {
-            playerId,
-            skaterFullName,
-            positionCode,
-            teamAbbrevs,
-            seasonId: newSeasonId,
-            ...rest,
-          };
-        } else {
-          Object.keys(rest).forEach((key) => {
-            aggregatedData[playerId][key] =
-              (aggregatedData[playerId][key] || 0) + (rest[key] || 0);
-          });
-        }
-      });
+        return _(data)
+          .groupBy("playerId") // Group by playerId
+          .mapValues((records) => {
+            const combinedSeasonId = getCombinedSeasonId(records);
 
-      dataToSort = Object.values(aggregatedData);
-      console.log(dataToSort);
+            // Initialize aggregation
+            const mergedData = records.reduce((acc, record) => {
+              // Set the stitched seasonId as a number
+              acc.seasonId = combinedSeasonId;
+
+              // Sum stats and calculate weighted stats
+              statFieldsToMerge.forEach((stat) => {
+                // Calculate normal and weighted sums
+                const statValue = record[stat] || 0;
+                const weight = seasonWeights[record.seasonId] || 1;
+
+                // Sum normal stats
+                acc[stat] = (acc[stat] || 0) + statValue;
+
+                // Sum weighted stats
+                const weightedStatKey = `${stat}Weighted`;
+                acc[weightedStatKey] =
+                  (acc[weightedStatKey] || 0) + statValue * weight;
+              });
+
+              // Include any other stats not in statFieldsToMerge
+              Object.keys(record).forEach((key) => {
+                if (
+                  !Object.prototype.hasOwnProperty.call(acc, key) &&
+                  !statFieldsToMerge.includes(key)
+                ) {
+                  acc[key] = record[key]; // Keep the original value for any other stats
+                }
+              });
+              return acc;
+            }, {});
+
+            return mergedData;
+          })
+          .values() // Convert object back to array if needed
+          .value();
+      };
+
+      const aggregatedData = mergeStatsByPlayerIdWithWeights(dataToSort);
+      dataToSort = aggregatedData;
     }
 
     if (statsPerGame) {
@@ -89,6 +126,7 @@ const PlayerTable = () => {
       const perGameStats = [
         "goals",
         "assists",
+        "points",
         "ppPoints",
         "shots",
         "hits",
@@ -111,13 +149,13 @@ const PlayerTable = () => {
       .filter((player) => player.positionCode !== "G")
       .map((player) => {
         const stats = {
-          goals: player.goals,
-          assists: player.assists,
-          points: player.points,
-          ppPoints: player.ppPoints,
-          shots: player.shots,
-          hits: player.hits,
-          blockedShots: player.blockedShots,
+          goals: player.goalsWeighted || player.goals,
+          assists: player.assistsWeighted || player.assists,
+          points: player.pointsWeighted || player.points,
+          ppPoints: player.ppPointsWeighted || player.ppPoints,
+          shots: player.shotsWeighted | player.shots,
+          hits: player.hitsWeighted || player.hits,
+          blockedShots: player.blockedShotsWeighted || player.blockedShots,
         };
 
         return stats;
@@ -155,14 +193,16 @@ const PlayerTable = () => {
                 goalieStatMeans,
                 goalieStatStdDevs,
                 scarcityFactors,
-                weights.goalie
+                weights.goalie,
+                filterOptions.sumSeasons
               )
             : calculateZScore(
                 player,
                 playerStatMeans,
                 playerStatStdDevs,
                 scarcityFactors,
-                weights.skater
+                weights.skater,
+                filterOptions.sumSeasons
               );
 
         return {
