@@ -8,8 +8,8 @@ import { PlayerTableContext } from "../../context/PlayerTableContext";
 import MinGamesFilter from "./MinGamesFilter";
 import PlayerSearchFilter from "./PlayerSearchFilter";
 import CompareSelectedFilter from "./CompareSelectedFilter";
-import SumSeasonsFilter from "./SumSeasonsFilter";
 import { Nav, Navbar, Row } from "react-bootstrap";
+import SumSeasonsFilter from "./SumSeasonsFilter";
 
 const Filters = () => {
   const {
@@ -51,7 +51,7 @@ const Filters = () => {
         <Nav className="me-auto">
           <Row className="my-2 filter-row">
             <SeasonFilter />
-            {/* <SumSeasonsFilter /> */}
+            <SumSeasonsFilter />
             <PositionFilter />
             <TeamFilter />
             <MinGamesFilter />

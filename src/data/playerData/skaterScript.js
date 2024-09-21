@@ -1,9 +1,6 @@
 const skaterAttributes = require("./skaterAttributes.json");
 const goalieAttributes = require("./goalieAttributes.json");
-const keyBy = require("lodash.keyby");
-const merge = require("lodash.merge");
-const pick = require("lodash.pick");
-
+const _ = require("lodash");
 const fs = require("fs").promises;
 
 const years = ["20212022", "20222023", "20232024"];
@@ -64,25 +61,25 @@ const fetchData = async (url, year) => {
 };
 
 const mergeDataByPlayerId = (summaryData, biosData, realtimeData) => {
-  const lookupSummary = keyBy(summaryData, "playerId");
-  const lookupBios = keyBy(biosData, "playerId");
-  const lookupRealtime = keyBy(realtimeData, "playerId");
+  const lookupSummary = _.keyBy(summaryData, "playerId");
+  const lookupBios = _.keyBy(biosData, "playerId");
+  const lookupRealtime = _.keyBy(realtimeData, "playerId");
 
   const mergedData = Object.values(
-    merge({}, lookupSummary, lookupRealtime, lookupBios)
+    _.merge({}, lookupSummary, lookupRealtime, lookupBios)
   );
 
-  return mergedData.map((playerData) => pick(playerData, skaterAttributes));
+  return mergedData.map((playerData) => _.pick(playerData, skaterAttributes));
 };
 
 const mergeGoalieDataByPlayerId = (summaryData, biosData) => {
-  const lookupSummary = keyBy(summaryData, "playerId");
-  const lookupBios = keyBy(biosData, "playerId");
+  const lookupSummary = _.keyBy(summaryData, "playerId");
+  const lookupBios = _.keyBy(biosData, "playerId");
 
-  const mergedData = Object.values(merge({}, lookupSummary, lookupBios));
+  const mergedData = Object.values(_.merge({}, lookupSummary, lookupBios));
 
   return mergedData.map((playerData) => ({
-    ...pick(playerData, goalieAttributes),
+    ..._.pick(playerData, goalieAttributes),
     skaterFullName: playerData.goalieFullName,
     positionCode: "G",
   }));

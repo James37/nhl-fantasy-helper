@@ -8,5 +8,5 @@
     "hits": 1,
     "blockedShots": 1
   },
-  "goalie": { "wins": 1, "savePct": 1, "goalsAgainstAverage": -1 }
+  "goalie": { "wins": 1, "savePct": 1, "goalsAgainstAverage": 1 }
 }

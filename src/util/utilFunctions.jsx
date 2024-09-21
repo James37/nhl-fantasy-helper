@@ -56,19 +56,23 @@ export const formatValue = (
   // Birthdate: Convert to age
   if (headerKey === "birthDate") {
     const calculatedAge = calculateAge(value);
-    const ageClass =
+    let ageClass =
       calculatedAge < 25
         ? "text-success"
         : calculatedAge > 29
         ? "text-danger"
         : "";
 
+    if (calculatedAge > 33 || calculatedAge < 23) {
+      ageClass += " fw-bold";
+    }
+
     return <span className={ageClass}>{calculatedAge}</span>;
   }
 
   // Show current team, if it's different
   if (headerKey === "teamAbbrevs") {
-    if (value !== player.currentTeamAbbrev) {
+    if (player.currentTeamAbbrev && value !== player.currentTeamAbbrev) {
       return (
         <span>
           {value} ({player.currentTeamAbbrev})
