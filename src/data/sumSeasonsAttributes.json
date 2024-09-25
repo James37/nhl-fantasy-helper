@@ -1,0 +1,20 @@
+{
+  "skater": [
+    "assists",
+    "blockedShots",
+    "gamesPlayed",
+    "goals",
+    "hits",
+    "points",
+    "ppPoints",
+    "shots"
+  ],
+  "goalie": [
+    "gamesPlayed",
+    "wins",
+    "saves",
+    "goalsAgainst",
+    "shotsAgainst",
+    "timeOnIce"
+  ]
+}

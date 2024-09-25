@@ -9,11 +9,16 @@ import {
 } from "../util/ZScoreCalculator.js";
 import { formatValue } from "../util/utilFunctions.jsx";
 import { PlayerTableContext } from "../context/PlayerTableContext.jsx";
+import sumSeasonsAttributes from "../data/sumSeasonsAttributes.json";
+import statsPerGameAttributes from "../data/statsPerGameAttributes.json";
+import meanPlayerAttributes from "../data/meanPlayerAttributes.json";
+
 import _ from "lodash";
 
 const PlayerTable = () => {
   const [sortColumn, setSortColumn] = useState("zScore");
   const [sortOrder, setSortOrder] = useState("desc");
+  const [meansAndStdDevs, setMeansAndStdDevs] = useState();
 
   const {
     pageSize,
@@ -25,6 +30,7 @@ const PlayerTable = () => {
     weights,
     compareList,
     setCompareList,
+    seasonWeights,
   } = useContext(PlayerTableContext);
 
   const handleSort = (key) => {
@@ -38,7 +44,7 @@ const PlayerTable = () => {
 
   const sortedData = useMemo(() => {
     // Copy the filtered data
-    let dataToSort = [...filteredData];
+    let dataToSort = _.cloneDeep(filteredData);
 
     if (filterOptions.sumSeasons) {
       const getCombinedSeasonId = (records) => {
@@ -55,25 +61,6 @@ const PlayerTable = () => {
 
       // Function to merge and sum stats, applying season weights
       const mergeStatsByPlayerIdWithWeights = (data) => {
-        // Season weights
-        const seasonWeights = {
-          20212022: 1,
-          20222023: 4,
-          20232024: 7,
-        };
-
-        // Stats to sum together
-        const statFieldsToMerge = [
-          "assists",
-          "blockedShots",
-          "gamesPlayed",
-          "goals",
-          "hits",
-          "points",
-          "ppPoints",
-          "shots",
-        ];
-
         return _(data)
           .groupBy("playerId") // Group by playerId
           .mapValues((records) => {
@@ -84,27 +71,22 @@ const PlayerTable = () => {
               // Set the stitched seasonId as a number
               acc.seasonId = combinedSeasonId;
 
-              // Sum stats and calculate weighted stats
-              statFieldsToMerge.forEach((stat) => {
-                // Calculate normal and weighted sums
-                const statValue = record[stat] || 0;
-                const weight = seasonWeights[record.seasonId] || 1;
-
-                // Sum normal stats
-                acc[stat] = (acc[stat] || 0) + statValue;
-
-                // Sum weighted stats
-                const weightedStatKey = `${stat}Weighted`;
-                acc[weightedStatKey] =
-                  (acc[weightedStatKey] || 0) + statValue * weight;
-              });
-
               // Include any other stats not in statFieldsToMerge
               Object.keys(record).forEach((key) => {
-                if (
-                  !Object.prototype.hasOwnProperty.call(acc, key) &&
-                  !statFieldsToMerge.includes(key)
-                ) {
+                // Sum stats and calculate weighted stats
+                if (sumSeasonsAttributes.skater.includes(key)) {
+                  // Calculate normal and weighted sums
+                  const statValue = record[key] ?? 0;
+                  const weight = seasonWeights[record.seasonId] ?? 1;
+
+                  // Sum normal stats
+                  acc[key] = (acc[key] ?? 0) + statValue;
+
+                  // Sum weighted stats
+                  const weightedStatKey = `${key}Weighted`;
+                  acc[weightedStatKey] =
+                    (acc[weightedStatKey] ?? 0) + statValue * weight;
+                } else if (!Object.prototype.hasOwnProperty.call(acc, key)) {
                   acc[key] = record[key]; // Keep the original value for any other stats
                 }
               });
@@ -122,25 +104,27 @@ const PlayerTable = () => {
     }
 
     if (statsPerGame) {
-      // Calculate per game stats if needed
-      const perGameStats = [
-        "goals",
-        "assists",
-        "points",
-        "ppPoints",
-        "shots",
-        "hits",
-        "blockedShots",
-        "wins",
-      ];
+      const gamesPlayedKey = filterOptions.sumSeasons
+        ? "gamesPlayedWeighted"
+        : "gamesPlayed";
 
       dataToSort = dataToSort.map((player) => {
+        // Create a copy of the player object
         const updatedPlayer = { ...player };
-        perGameStats.forEach((stat) => {
-          if (player.gamesPlayed !== 0 && updatedPlayer[stat] !== undefined) {
+
+        statsPerGameAttributes.forEach((stat) => {
+          // Define the games played attribute based on filter options
+          const statName = filterOptions.sumSeasons ? `${stat}Weighted` : stat;
+
+          const gamesPlayed = player[gamesPlayedKey];
+
+          // Ensure games played is defined and not zero before division
+          if (gamesPlayed && updatedPlayer[statName] !== undefined) {
+            updatedPlayer[statName] = player[statName] / gamesPlayed;
             updatedPlayer[stat] = player[stat] / player.gamesPlayed;
           }
         });
+
         return updatedPlayer;
       });
     }
@@ -182,6 +166,10 @@ const PlayerTable = () => {
 
     const goalieStatMeans = goalieStatsValues.statMeans;
     const goalieStatStdDevs = goalieStatsValues.statStdDevs;
+    setMeansAndStdDevs({
+      means: { ...playerStatMeans, ...goalieStatMeans },
+      standardDeviations: { ...playerStatStdDevs, ...goalieStatStdDevs },
+    });
 
     // Calculate z-scores and format values
     return dataToSort
@@ -263,6 +251,7 @@ const PlayerTable = () => {
   }, [
     filteredData,
     scarcityFactors,
+    seasonWeights,
     sortColumn,
     sortOrder,
     statsPerGame,
@@ -312,7 +301,7 @@ const PlayerTable = () => {
         <Table striped hover responsive className="m-0">
           <thead>
             <tr>
-              <th></th>
+              <th />
               {filterHeaders().map((header) => (
                 <th
                   key={header.key}
@@ -325,6 +314,26 @@ const PlayerTable = () => {
             </tr>
           </thead>
           <tbody>
+            {meansAndStdDevs && (
+              <tr className="table-warning">
+                <td colSpan={2} />
+                <td colSpan={6}>Mean Player</td>
+                {filterHeaders()
+                  .filter((header) => meanPlayerAttributes.includes(header.key))
+                  .map((header) => (
+                    <td key={header.key}>
+                      {formatValue(
+                        meansAndStdDevs.means,
+                        meansAndStdDevs.means[header.key],
+                        header.key,
+                        compareList,
+                        setCompareList
+                      )}
+                    </td>
+                  ))}
+                <td>0</td>
+              </tr>
+            )}
             {paginatedData.map((player, index) => (
               <tr key={index}>
                 <td>{calculateIndex(index)}</td>

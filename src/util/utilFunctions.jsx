@@ -28,6 +28,10 @@ const calculateAge = (birthDateString) => {
   return age;
 };
 
+export const getShortFormSeason = (season) => {
+  return `${season.toString().slice(2, 4)}-${season.toString().slice(6, 8)}`;
+};
+
 export const formatValue = (
   player,
   value,
@@ -39,7 +43,7 @@ export const formatValue = (
   if (headerKey === "seasonId" && value) {
     return (
       <span className={value === 20232024 ? "fw-bold" : ""}>
-        {value.toString().slice(2, 4)}-{value.toString().slice(6, 8)}
+        {getShortFormSeason(value)}
       </span>
     );
   }

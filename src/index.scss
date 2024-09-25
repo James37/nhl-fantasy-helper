@@ -69,6 +69,17 @@ td.sorted {
   }
 }
 
+.modal-content {
+  .modal-header {
+    background: rgb(61, 56, 56);
+    color: #fafafa;
+    font-size: 16px !important;
+    font-weight: bold;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+}
+
 .player-name {
   cursor: pointer;
 }

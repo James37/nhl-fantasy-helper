@@ -16,5 +16,6 @@
   "teamAbbrevs",
   "wins",
   "birthDate",
-  "currentTeamAbbrev"
+  "currentTeamAbbrev",
+  "timeOnIce"
 ]

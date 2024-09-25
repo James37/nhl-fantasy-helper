@@ -1,7 +1,8 @@
 import { createContext, useState, useMemo } from "react";
 import skaterData from "../data/playerData/skaterData.json";
 import goalieData from "../data/playerData/goalieData.json";
-import defaultScarcityFactor from "../data/defaultScarcityFactors.json";
+import defaultScarcityFactors from "../data/defaultScarcityFactors.json";
+import defaultSeasonWeights from "../data/defaultSeasonWeights.json";
 import defaultWeights from "../data/defaultWeights.json";
 
 const PlayerTableContext = createContext();
@@ -10,7 +11,8 @@ const PlayerTableProvider = ({ children }) => {
   const [pageSize, setPageSize] = useState(50);
   const [currentPage, setCurrentPage] = useState(1);
   const [statsPerGame, setStatsPerGame] = useState(false);
-  const [scarcityFactors, setScarcityFactors] = useState(defaultScarcityFactor);
+  const [scarcityFactors, setScarcityFactors] = useState(defaultScarcityFactors);
+  const [seasonWeights, setSeasonWeights] = useState(defaultSeasonWeights);
   const [weights, setWeights] = useState(defaultWeights);
   const [compareList, setCompareList] = useState([]);
   const [filterOptions, setFilterOptions] = useState({
@@ -51,6 +53,8 @@ const PlayerTableProvider = ({ children }) => {
       scarcityFactors,
       weights,
       setScarcityFactors,
+      seasonWeights,
+      setSeasonWeights,
       setWeights,
       filterOptions,
       setFilterOptions,
@@ -65,6 +69,7 @@ const PlayerTableProvider = ({ children }) => {
       statsPerGame,
       scarcityFactors,
       weights,
+      seasonWeights,
       filterOptions,
       compareList,
     ]

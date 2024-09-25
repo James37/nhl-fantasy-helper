@@ -1,7 +1,7 @@
-const skaterAttributes = require("./skaterAttributes.json");
-const goalieAttributes = require("./goalieAttributes.json");
-const _ = require("lodash");
-const fs = require("fs").promises;
+import skaterAttributes from "./skaterAttributes.json" assert { type: "json" };
+import goalieAttributes from "./goalieAttributes.json" assert { type: "json" };
+import _ from "lodash";
+import { promises as fs } from "fs";
 
 const years = ["20212022", "20222023", "20232024"];
 // Base URLs for skaters and goalies

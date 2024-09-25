@@ -11,16 +11,28 @@ import {
 } from "react-bootstrap";
 import headers from "../../data/tableHeaders.json";
 import { PlayerTableContext } from "../../context/PlayerTableContext";
+import { getShortFormSeason } from "../../util/utilFunctions";
+import defaultScarcityFactors from "../../data/defaultScarcityFactors.json";
+import defaultSeasonWeights from "../../data/defaultSeasonWeights.json";
+import defaultWeights from "../../data/defaultWeights.json";
 
 const ZScoreFilter = () => {
   const [showModal, setShowModal] = useState(false);
 
-  const { scarcityFactors, weights, setScarcityFactors, setWeights } =
-    useContext(PlayerTableContext);
+  const {
+    scarcityFactors,
+    weights,
+    setScarcityFactors,
+    setWeights,
+    seasonWeights,
+    setSeasonWeights,
+  } = useContext(PlayerTableContext);
 
   const [updatedScarcityFactors, setUpdatedScarcityFactors] =
     useState(scarcityFactors);
   const [updatedWeights, setUpdatedWeights] = useState(weights);
+  const [updatedSeasonWeights, setUpdatedSeasonWeights] =
+    useState(seasonWeights);
 
   const handleChange = (e, type, position, stat) => {
     const value = e.target.value;
@@ -30,6 +42,11 @@ const ZScoreFilter = () => {
       setUpdatedWeights((prev) => ({
         ...prev,
         [position]: { ...prev[position], [stat]: value },
+      }));
+    } else if (type === "seasonWeights") {
+      setUpdatedSeasonWeights((prev) => ({
+        ...prev,
+        [position]: value,
       }));
     }
   };
@@ -48,19 +65,32 @@ const ZScoreFilter = () => {
         ...prev,
         [position]: prev[position] || "0",
       }));
+    } else if (type === "seasonWeights") {
+      setUpdatedSeasonWeights((prev) => ({
+        ...prev,
+        [position]: prev[position] || "0",
+      }));
     }
   };
 
   const applyChanges = () => {
     setScarcityFactors(updatedScarcityFactors);
     setWeights(updatedWeights);
+    setSeasonWeights(updatedSeasonWeights);
     setShowModal(false);
+  };
+
+  // Function to reset to default values
+  const resetToDefaults = () => {
+    setUpdatedScarcityFactors(defaultScarcityFactors);
+    setUpdatedWeights(defaultWeights);
+    setUpdatedSeasonWeights(defaultSeasonWeights);
   };
 
   const tooltip = (
     <Tooltip>
       <div className="my-4">
-        <div className="fw-bold">Scarcity</div>
+        <div className="fw-bold mb-1">Scarcity</div>
         {Object.entries(updatedScarcityFactors)
           .map(([position, value]) => {
             const header = headers.find((header) => header.key === position);
@@ -68,7 +98,7 @@ const ZScoreFilter = () => {
           })
           .join(", ")}
         <hr />
-        <div className="fw-bold">Skater Weights</div>
+        <div className="fw-bold mb-1">Skater</div>
         {Object.entries(updatedWeights.skater)
           .map(([stat, value]) => {
             const header = headers.find((header) => header.key === stat);
@@ -76,11 +106,18 @@ const ZScoreFilter = () => {
           })
           .join(", ")}
         <hr />
-        <div className="fw-bold">Goalie Weights</div>
+        <div className="fw-bold mb-1">Goalie</div>
         {Object.entries(updatedWeights.goalie)
           .map(([stat, value]) => {
             const header = headers.find((header) => header.key === stat);
             return `${header ? header.label : stat}: ${value}`;
+          })
+          .join(", ")}
+        <hr />
+        <div className="fw-bold mb-1">Season</div>
+        {Object.entries(updatedSeasonWeights)
+          .map(([season, value]) => {
+            return `${getShortFormSeason(season)}: ${value}`;
           })
           .join(", ")}
       </div>
@@ -113,21 +150,19 @@ const ZScoreFilter = () => {
         }}
         size="lg"
       >
-        <Modal.Header closeButton>
-          <h5>Z-Score Settings</h5>
-        </Modal.Header>
+        <Modal.Header closeButton>Z-Score Weights</Modal.Header>
         <Modal.Body>
           <Container>
-            <Form>
-              <Row className="mb-5">
+            <Form className="my-2">
+              <Row className="mb-4">
                 <Col>
                   <Form.Group controlId="scarcityFactors">
-                    <Form.Label>
-                      <h6>Position Scarcity Factors</h6>
+                    <Form.Label className="fw-bold mb-3">
+                      Position Scarcity
                     </Form.Label>
                     <Row>
                       {Object.keys(updatedScarcityFactors).map((position) => (
-                        <Col key={position}>
+                        <Col key={position} className="mb-4">
                           <Form.Group controlId={`scarcity-${position}`}>
                             <Form.Label>
                               {headers.find((header) => header.key === position)
@@ -156,15 +191,15 @@ const ZScoreFilter = () => {
                   </Form.Group>
                 </Col>
               </Row>
-              <Row className="mb-5">
+              <Row className="mb-4">
                 <Col>
                   <Form.Group controlId="skaterWeights">
-                    <Form.Label>
-                      <h6>Skater Stats Weights</h6>
+                    <Form.Label className="fw-bold mb-3">
+                      Skater Stats
                     </Form.Label>
                     <Row>
                       {Object.keys(updatedWeights.skater).map((stat) => (
-                        <Col key={stat}>
+                        <Col key={stat} xs={3} sm={true} className="mb-4">
                           <Form.Group controlId={`skater-${stat}`}>
                             <Form.Label>
                               {headers.find((header) => header.key === stat)
@@ -193,15 +228,15 @@ const ZScoreFilter = () => {
                   </Form.Group>
                 </Col>
               </Row>
-              <Row className="mb-5">
+              <Row className="mb-4">
                 <Col>
                   <Form.Group controlId="goalieWeights">
-                    <Form.Label>
-                      <h6>Goalie Stats Weights</h6>
+                    <Form.Label className="fw-bold mb-3">
+                      Goalie Stats
                     </Form.Label>
                     <Row>
                       {Object.keys(updatedWeights.goalie).map((stat) => (
-                        <Col key={stat}>
+                        <Col key={stat} className="mb-4">
                           <Form.Group controlId={`goalie-${stat}`}>
                             <Form.Label>
                               {headers.find((header) => header.key === stat)
@@ -230,9 +265,47 @@ const ZScoreFilter = () => {
                   </Form.Group>
                 </Col>
               </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="seasonWeights">
+                    <Form.Label className="fw-bold mb-3">
+                      Summed Season
+                    </Form.Label>
+                    <Row>
+                      {Object.keys(updatedSeasonWeights).map((season) => (
+                        <Col key={season} className="mb-4">
+                          <Form.Group controlId={`season-${season}`}>
+                            <Form.Label>
+                              {getShortFormSeason(season)}
+                            </Form.Label>
+                            <Form.Control
+                              type="number"
+                              size="sm"
+                              name={season}
+                              placeholder={`Enter Weight for ${getShortFormSeason(
+                                season
+                              )}`}
+                              value={updatedSeasonWeights[season]}
+                              onChange={(e) =>
+                                handleChange(e, "seasonWeights", season)
+                              }
+                              onBlur={() => handleBlur("seasonWeights", season)}
+                            />
+                          </Form.Group>
+                        </Col>
+                      ))}
+                    </Row>
+                  </Form.Group>
+                </Col>
+              </Row>
             </Form>
           </Container>
         </Modal.Body>
+        <Modal.Footer>
+          <Button size="sm" variant="primary" onClick={resetToDefaults}>
+            Reset
+          </Button>
+        </Modal.Footer>
       </Modal>
     </>
   );

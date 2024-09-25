@@ -34,19 +34,18 @@ export const calculateZScore = (
 
     // Only consider stats with a non-zero weight and valid player stat
     if (weight !== 0) {
-      const scarcityFactor = scarcityFactors[player.positionCode] || 1;
+      const scarcityFactor = scarcityFactors[player.positionCode] ?? 1;
       const mean = statMeans[stat];
       const stdDev = statStdDevs[stat];
       const playerStat = player[sumSeasons ? `${stat}Weighted` : stat];
 
-      // Skip if standard deviation is zero to avoid division by zero
-      if (stdDev === 0) {
-        return; // You could also set adjustedZScore = 0 if preferred
-      }
+      const adjustedZScore =
+        stdDev === 0
+          ? 0
+          : ((playerStat - mean) / stdDev) * weight * scarcityFactor;
 
       // Calculate adjusted Z-score
-      const adjustedZScore = ((playerStat - mean) / stdDev) * scarcityFactor;
-      totalZScore += adjustedZScore * weight;
+      totalZScore += adjustedZScore;
       statCount++; // Increment for each valid stat considered
     }
   });
