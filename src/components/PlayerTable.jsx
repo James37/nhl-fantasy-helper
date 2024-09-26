@@ -7,7 +7,7 @@ import {
   calculateStatValues,
   calculateZScore,
 } from "../util/ZScoreCalculator.js";
-import { formatValue } from "../util/utilFunctions.jsx";
+import { formatValue, getCombinedSeasonId } from "../util/utilFunctions.jsx";
 import { PlayerTableContext } from "../context/PlayerTableContext.jsx";
 import sumSeasonsAttributes from "../data/sumSeasonsAttributes.json";
 import statsPerGameAttributes from "../data/statsPerGameAttributes.json";
@@ -47,18 +47,6 @@ const PlayerTable = () => {
     let dataToSort = _.cloneDeep(filteredData);
 
     if (filterOptions.sumSeasons) {
-      const getCombinedSeasonId = (records) => {
-        // Find the min and max seasonId
-        const seasonIds = records.map((record) => record.seasonId);
-        const minSeasonId = Math.min(...seasonIds);
-        const maxSeasonId = Math.max(...seasonIds);
-
-        const minSeasonIdStr = minSeasonId.toString();
-        const maxSeasonIdStr = maxSeasonId.toString();
-
-        return parseInt(minSeasonIdStr.slice(0, 4) + maxSeasonIdStr.slice(-4));
-      };
-
       // Function to merge and sum stats, applying season weights
       const mergeStatsByPlayerIdWithWeights = (data) => {
         return _(data)
@@ -74,7 +62,10 @@ const PlayerTable = () => {
               // Include any other stats not in statFieldsToMerge
               Object.keys(record).forEach((key) => {
                 // Sum stats and calculate weighted stats
-                if (sumSeasonsAttributes.skater.includes(key)) {
+                if (
+                  sumSeasonsAttributes.skater.includes(key) ||
+                  sumSeasonsAttributes.goalie.includes(key)
+                ) {
                   // Calculate normal and weighted sums
                   const statValue = record[key] ?? 0;
                   const weight = seasonWeights[record.seasonId] ?? 1;
@@ -86,6 +77,20 @@ const PlayerTable = () => {
                   const weightedStatKey = `${key}Weighted`;
                   acc[weightedStatKey] =
                     (acc[weightedStatKey] ?? 0) + statValue * weight;
+                  if (key === "goalsAgainst" || key === "timeOnIce") {
+                    if (acc.goalsAgainst && acc.timeOnIce) {
+                      acc.goalsAgainstAverage =
+                        acc.goalsAgainst * 3600 / acc.timeOnIce;
+                    }
+                    acc.goalsAgainstAverageWeighted =
+                      acc.goalsAgainstAverage * weight;
+                  }
+                  if (key === "saves" || key === "shotsAgainst") {
+                    if (acc.shotsAgainst && acc.saves) {
+                      acc.savePct = acc.saves / acc.shotsAgainst;
+                    }
+                    acc.savePctWeighted = acc.savePct * weight;
+                  }
                 } else if (!Object.prototype.hasOwnProperty.call(acc, key)) {
                   acc[key] = record[key]; // Keep the original value for any other stats
                 }
@@ -149,9 +154,10 @@ const PlayerTable = () => {
       .filter((player) => player.positionCode === "G")
       .map((player) => {
         const stats = {
-          goalsAgainstAverage: player.goalsAgainstAverage,
-          savePct: player.savePct,
-          wins: player.wins,
+          goalsAgainstAverage:
+            player.goalsAgainstAverageWeighted || player.goalsAgainstAverage,
+          savePct: player.savePctWeighted || player.savePct,
+          wins: player.winsWeighted || player.wins,
         };
 
         return stats;

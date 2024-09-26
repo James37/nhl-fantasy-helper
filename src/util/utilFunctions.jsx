@@ -1,5 +1,17 @@
 import { Form } from "react-bootstrap";
 
+export const getCombinedSeasonId = (records) => {
+  // Find the min and max seasonId
+  const seasonIds = records.map((record) => record.seasonId);
+  const minSeasonId = Math.min(...seasonIds);
+  const maxSeasonId = Math.max(...seasonIds);
+
+  const minSeasonIdStr = minSeasonId.toString();
+  const maxSeasonIdStr = maxSeasonId.toString();
+
+  return parseInt(minSeasonIdStr.slice(0, 4) + maxSeasonIdStr.slice(-4));
+};
+
 export const handlePlayerClick = (player) => {
   const fullNameArray = player.skaterFullName.split(" ");
   const firstName = fullNameArray[0];
