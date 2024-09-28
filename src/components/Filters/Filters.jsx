@@ -10,6 +10,8 @@ import PlayerSearchFilter from "./PlayerSearchFilter";
 import CompareSelectedFilter from "./CompareSelectedFilter";
 import { Nav, Navbar, Row } from "react-bootstrap";
 import SumSeasonsFilter from "./SumSeasonsFilter";
+import AgeFilter from "./AgeFilter";
+import { calculateAge } from "../../util/utilFunctions";
 
 const Filters = () => {
   const {
@@ -22,6 +24,8 @@ const Filters = () => {
 
   useEffect(() => {
     const filtered = fullData.filter((player) => {
+      const age = calculateAge(player.birthDate);
+
       return (
         (!filterOptions.selectedPosition ||
           (filterOptions.selectedPosition === "S" &&
@@ -31,10 +35,12 @@ const Filters = () => {
             player.positionCode !== "D") ||
           filterOptions.selectedPosition === player.positionCode) &&
         (!filterOptions.selectedTeam ||
-          player.teamAbbrevs === filterOptions.selectedTeam) &&
+          player.currentTeamAbbrev === filterOptions.selectedTeam) &&
         (!filterOptions.selectedSeason ||
           player.seasonId?.toString() === filterOptions.selectedSeason) &&
         player.gamesPlayed >= filterOptions.minGamesPlayed &&
+        age >= filterOptions.age.min &&
+        age <= filterOptions.age.max &&
         (!filterOptions.compareSelected ||
           compareList.includes(player.playerId + player.seasonId))
       );
@@ -54,6 +60,7 @@ const Filters = () => {
             <SumSeasonsFilter />
             <PositionFilter />
             <TeamFilter />
+            <AgeFilter />
             <MinGamesFilter />
             <PlayerSearchFilter />
             <StatsPerGameFilter />

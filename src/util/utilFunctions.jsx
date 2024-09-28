@@ -21,7 +21,7 @@ export const handlePlayerClick = (player) => {
   window.open(url, "_blank");
 };
 
-const calculateAge = (birthDateString) => {
+export const calculateAge = (birthDateString) => {
   const birthDate = new Date(birthDateString);
   if (isNaN(birthDate)) return "N/A"; // Handle invalid dates
 

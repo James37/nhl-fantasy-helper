@@ -11,7 +11,9 @@ const PlayerTableProvider = ({ children }) => {
   const [pageSize, setPageSize] = useState(50);
   const [currentPage, setCurrentPage] = useState(1);
   const [statsPerGame, setStatsPerGame] = useState(false);
-  const [scarcityFactors, setScarcityFactors] = useState(defaultScarcityFactors);
+  const [scarcityFactors, setScarcityFactors] = useState(
+    defaultScarcityFactors
+  );
   const [seasonWeights, setSeasonWeights] = useState(defaultSeasonWeights);
   const [weights, setWeights] = useState(defaultWeights);
   const [compareList, setCompareList] = useState([]);
@@ -23,6 +25,10 @@ const PlayerTableProvider = ({ children }) => {
     selectedSeason: "20232024",
     compareSelected: false,
     sumSeasons: false,
+    age: {
+      min: 18,
+      max: 45,
+    },
   });
 
   const fullData = useMemo(
