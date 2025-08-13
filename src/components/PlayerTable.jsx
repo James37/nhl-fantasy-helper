@@ -142,7 +142,7 @@ const PlayerTable = () => {
           assists: player.assistsWeighted || player.assists,
           points: player.pointsWeighted || player.points,
           ppPoints: player.ppPointsWeighted || player.ppPoints,
-          shots: player.shotsWeighted | player.shots,
+          shots: player.shotsWeighted || player.shots,
           hits: player.hitsWeighted || player.hits,
           blockedShots: player.blockedShotsWeighted || player.blockedShots,
         };
