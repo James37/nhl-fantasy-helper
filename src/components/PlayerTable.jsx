@@ -80,7 +80,7 @@ const PlayerTable = () => {
                   if (key === "goalsAgainst" || key === "timeOnIce") {
                     if (acc.goalsAgainst && acc.timeOnIce) {
                       acc.goalsAgainstAverage =
-                        acc.goalsAgainst * 3600 / acc.timeOnIce;
+                        (acc.goalsAgainst * 3600) / acc.timeOnIce;
                     }
                     acc.goalsAgainstAverageWeighted =
                       acc.goalsAgainstAverage * weight;
@@ -138,13 +138,13 @@ const PlayerTable = () => {
       .filter((player) => player.positionCode !== "G")
       .map((player) => {
         const stats = {
-          goals: player.goalsWeighted || player.goals,
-          assists: player.assistsWeighted || player.assists,
-          points: player.pointsWeighted || player.points,
-          ppPoints: player.ppPointsWeighted || player.ppPoints,
-          shots: player.shotsWeighted || player.shots,
-          hits: player.hitsWeighted || player.hits,
-          blockedShots: player.blockedShotsWeighted || player.blockedShots,
+          goals: player.goalsWeighted ?? player.goals,
+          assists: player.assistsWeighted ?? player.assists,
+          points: player.pointsWeighted ?? player.points,
+          ppPoints: player.ppPointsWeighted ?? player.ppPoints,
+          shots: player.shotsWeighted ?? player.shots,
+          hits: player.hitsWeighted ?? player.hits,
+          blockedShots: player.blockedShotsWeighted ?? player.blockedShots,
         };
 
         return stats;
@@ -155,9 +155,9 @@ const PlayerTable = () => {
       .map((player) => {
         const stats = {
           goalsAgainstAverage:
-            player.goalsAgainstAverageWeighted || player.goalsAgainstAverage,
-          savePct: player.savePctWeighted || player.savePct,
-          wins: player.winsWeighted || player.wins,
+            player.goalsAgainstAverageWeighted ?? player.goalsAgainstAverage,
+          savePct: player.savePctWeighted ?? player.savePct,
+          wins: player.winsWeighted ?? player.wins,
         };
 
         return stats;
