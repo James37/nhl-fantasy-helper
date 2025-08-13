@@ -1,65 +1,44 @@
-# Getting Started with Create React App
+How to Use This Script
+This script automatically downloads NHL player data (skaters and goalies) for multiple seasons from the official NHL stats API, merges different data sources, cleans it up, and saves it as JSON.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+1. Make sure you have these files:
+skaterAttributes.json — list of fields to keep for skaters.
 
-## Available Scripts
+goalieAttributes.json — list of fields to keep for goalies.
 
-In the project directory, you can run:
+(See examples below if you need to create them from scratch.)
 
-### `npm start`
+2. Make sure this folder exists:
+./src/data/playerData/
+The script will save all output here.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+3. Install dependencies:
+npm install lodash
+(Uses Node’s built-in fs and fetch, so no other packages needed.)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+4. Run the script:
+node skaterScript.js
+5. What happens when you run it:
+Fetches data for the seasons listed in years at the top of the script.
 
-### `npm run build`
+For each season:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Skaters → gets summary stats, bios, and realtime data
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Goalies → gets summary stats and bios
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Merges all the data into one record per player.
 
-### `npm run eject`
+Keeps only the attributes you listed in the JSON files.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Saves:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+skaterData.json — all skater data by season
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+goalieData.json — all goalie data by season
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+playersMissingAttributes.json — skaters missing any expected fields
 
-## Learn More
+goaliesMissingAttributes.json — goalies missing any expected fields
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+You can now load those JSON files in your app or analysis project.

@@ -22,7 +22,7 @@ const PlayerTableProvider = ({ children }) => {
     selectedTeam: "",
     minGamesPlayed: 0,
     searchTerm: "",
-    selectedSeason: "20232024",
+    selectedSeason: "20242025",
     compareSelected: false,
     sumSeasons: false,
     age: {
@@ -36,9 +36,11 @@ const PlayerTableProvider = ({ children }) => {
       ...skaterData["2021"],
       ...skaterData["2022"],
       ...skaterData["2023"],
+      ...skaterData["2024"],
       ...goalieData["2021"],
       ...goalieData["2022"],
       ...goalieData["2023"],
+      ...goalieData["2024"],
     ],
     []
   );

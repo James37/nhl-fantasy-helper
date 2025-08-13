@@ -5,6 +5,6 @@ export default defineConfig({
   plugins: [react()],
   base: "/nhl-fantasy-helper/",
   server: {
-    port: 3000,
+    port: 3001,
   },
 });

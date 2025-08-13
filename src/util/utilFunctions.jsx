@@ -54,7 +54,7 @@ export const formatValue = (
   // SeasonId: Format bold for current season
   if (headerKey === "seasonId" && value) {
     return (
-      <span className={value === 20232024 ? "fw-bold" : ""}>
+      <span className={value === 20242025 ? "fw-bold" : ""}>
         {getShortFormSeason(value)}
       </span>
     );

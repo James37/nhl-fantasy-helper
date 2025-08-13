@@ -21,6 +21,7 @@ const SeasonFilter = () => {
           size="sm"
         >
           <option value="">All</option>
+          <option value="20242025">2024-2025</option>
           <option value="20232024">2023-2024</option>
           <option value="20222023">2022-2023</option>
           <option value="20212022">2021-2022</option>

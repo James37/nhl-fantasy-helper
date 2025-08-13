@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "fetch": "node src/data/playerData/skaterScript.js"
   },
   "dependencies": {
     "bootstrap": "^5.3.2",
